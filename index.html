@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Flappy bird</title>
+    <meta name="description" content="Yay trust" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="game_container">
+      <div id="bird"></div>
+      <div id="score">Score: 0</div>
+    </div>
+    <button id="start_button" onclick="onStartButtonClick()">Start game</button>
+    <select id="difficulty-select">
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+      <option value="insane">Insane</option>
+    </select>
+    <button id="reset_high" onclick="resetHighScore()">Reset High Score</button>
+  </body>
+</html>

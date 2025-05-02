@@ -14,7 +14,23 @@ backgroundMusic.loop = true;
 backgroundMusic.volume = 0.5;
 backgroundMusic.play();
 
-let highScore = localStorage.getItem("flappyHighScore") || 0;
+if (localStorage.getItem("easyHighScore") == null) {
+  localStorage.setItem("easyHighScore", 0);
+}
+if (localStorage.getItem("mediumHighScore") == null) {
+  localStorage.setItem("mediumHighScore", 0);
+}
+if (localStorage.getItem("hardHighScore") == null) {
+  localStorage.setItem("hardHighScore", 0);
+}
+if (localStorage.getItem("insaneHighScore") == null) {
+  localStorage.setItem("insaneHighScore", 0);
+}
+
+let easyHighScore = localStorage.getItem("easyHighScore");
+let mediumHighScore = localStorage.getItem("mediumHighScore");
+let hardHighScore = localStorage.getItem("hardHighScore");
+let insaneHighScore = localStorage.getItem("insaneHighScore");
 
 let gameInterval = null;
 
@@ -30,8 +46,18 @@ let difficulty_select = document.getElementById("difficulty-select");
 
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space" || e.code === "ArrowUp") {
-    if (game_state !== "Play") {
-      game_state = "Play";
+    const selected = difficulty_select.value;
+    if (game_state !== "PlayEasy" && selected == "easy") {
+      game_state = "PlayEasy";
+      startGame();
+    } else if (game_state !== "PlayMedium" && selected === "medium") {
+      game_state = "PlayMedium";
+      startGame();
+    } else if (game_state !== "PlayHard" && selected === "hard") {
+      game_state = "PlayHard";
+      startGame();
+    } else if (game_state !== "PlayInsane" && selected === "insane") {
+      game_state = "PlayInsane";
       startGame();
     }
     flapSound.play();
@@ -42,8 +68,23 @@ document.addEventListener("keydown", (e) => {
 if (game_state == "Start") {
   // always update high score while inactive
   setInterval(() => {
-    let highScore = localStorage.getItem("flappyHighScore") || 0;
-    score_display.textContent = "Score: " + score + " | Best: " + highScore;
+    const selected = difficulty_select.value;
+    easyHighScore = localStorage.getItem("easyHighScore");
+    if (selected == "easy") {
+      score_display.textContent = "Score: " + score + " | Best: " + easyHighScore;
+    }
+    mediumHighScore = localStorage.getItem("mediumHighScore");
+    if (selected == "medium") {
+      score_display.textContent = "Score: " + score + " | Best: " + mediumHighScore;
+    }
+    hardHighScore = localStorage.getItem("hardHighScore");
+    if (selected == "hard") {
+      score_display.textContent = "Score: " + score + " | Best: " + hardHighScore;
+    }
+    insaneHighScore = localStorage.getItem("insaneHighScore");
+    if (selected == "insane") {
+      score_display.textContent = "Score: " + score + " | Best: " + insaneHighScore;
+    }
   }, 10);
 }
 
@@ -62,8 +103,21 @@ function startGame() {
   start_button.style.visibility = "hidden";
   difficulty_select.style.visibility = "hidden";
   reset_high.style.visibility = "hidden";
-  highScore = localStorage.getItem("flappyHighScore") || 0;
-  score_display.textContent = "Score: " + score + " | Best: " + highScore;
+  if (game_state === "PlayEasy") {
+    easyHighScore = localStorage.getItem("easyHighScore");
+    score_display.textContent = "Score: " + score + " | Best: " + easyHighScore;
+  } else if (game_state === "PlayMedium") {
+    mediumHighScore = localStorage.getItem("mediumHighScore");
+    score_display.textContent =
+      "Score: " + score + " | Best: " + mediumHighScore;
+  } else if (game_state === "PlayHard") {
+    hardHighScore = localStorage.getItem("hardHighScore");
+    score_display.textContent = "Score: " + score + " | Best: " + hardHighScore;
+  } else if (game_state === "PlayInsane") {
+    insaneHighScore = localStorage.getItem("insaneHighScore");
+    score_display.textContent =
+      "Score: " + score + " | Best: " + insaneHighScore;
+  }
 
   gameInterval = setInterval(() => {
     applyGravity();
@@ -78,8 +132,18 @@ function startGame() {
 }
 
 function onStartButtonClick() {
-  if (game_state !== "Play") {
-    game_state = "Play";
+  const selected = difficulty_select.value;
+  if (game_state !== "PlayEasy" && selected === "easy") {
+    game_state = "PlayEasy";
+    startGame();
+  } else if (game_state !== "PlayMedium" && selected === "medium") {
+    game_state = "PlayMedium";
+    startGame();
+  } else if (game_state !== "PlayHard" && selected === "hard") {
+    game_state = "PlayHard";
+    startGame();
+  } else if (game_state !== "PlayInsane" && selected === "insane") {
+    game_state = "PlayInsane";
     startGame();
   }
 }
@@ -123,7 +187,17 @@ function setScore(newScore) {
     scoreSound.play();
   }
   score = newScore;
-  score_display.textContent = "Score: " + score + " | Best: " + highScore;
+  if (game_state === "PlayEasy") {
+    score_display.textContent = "Score: " + score + " | Best: " + easyHighScore;
+  } else if (game_state === "PlayMedium") {
+    score_display.textContent =
+      "Score: " + score + " | Best: " + mediumHighScore;
+  } else if (game_state === "PlayHard") {
+    score_display.textContent = "Score: " + score + " | Best: " + hardHighScore;
+  } else if (game_state === "PlayInsane") {
+    score_display.textContent =
+      "Score: " + score + " | Best: " + insaneHighScore;
+  }
 }
 
 function checkCollision() {
@@ -161,8 +235,22 @@ function checkCollision() {
 }
 
 function endGame() {
-  if (Number(score) > Number(highScore)) {
-    localStorage.setItem("flappyHighScore", score);
+  if (game_state === "PlayEasy") {
+    if (Number(score) > Number(easyHighScore)) {
+      localStorage.setItem("easyHighScore", score);
+    }
+  } else if (game_state === "PlayMedium") {
+    if (Number(score) > Number(mediumHighScore)) {
+      localStorage.setItem("mediumHighScore", score);
+    }
+  } else if (game_state === "PlayHard") {
+    if (Number(score) > Number(hardHighScore)) {
+      localStorage.setItem("hardHighScore", score);
+    }
+  } else if (game_state === "PlayInsane") {
+    if (Number(score) > Number(insaneHighScore)) {
+      localStorage.setItem("insaneHighScore", score);
+    }
   }
 
   collideSound.play();
@@ -181,11 +269,25 @@ function resetGame() {
     pipe.remove();
   }
   pipes = [];
+  game_state = "Start";
   setScore(0);
   frame = 0;
-  game_state = "Start";
-  highScore = localStorage.getItem("flappyHighScore") || 0;
-  score_display.textContent = "Score: 0 | Best: " + highScore;
+  const selected = difficulty_select.value;
+
+  if (selected === "easy") {
+    easyHighScore = localStorage.getItem("easyHighScore");
+    score_display.textContent = "Score: 0 | Best: " + easyHighScore;
+  } else if (selected === "medium") {
+    mediumHighScore = localStorage.getItem("mediumHighScore");
+    score_display.textContent = "Score: 0 | Best: " + mediumHighScore;
+  } else if (selected === "hard") {
+    hardHighScore = localStorage.getItem("hardHighScore");
+    score_display.textContent = "Score: 0 | Best: " + hardHighScore;
+  } else if (selected === "insane") {
+    insaneHighScore = localStorage.getItem("insaneHighScore");
+    score_display.textContent = "Score: 0 | Best: " + insaneHighScore;
+  }
+
   start_button.style.visibility = "visible";
   difficulty_select.style.visibility = "visible";
   reset_high.style.visibility = "visible";
@@ -193,8 +295,20 @@ function resetGame() {
 
 function resetHighScore() {
   // reset high score function
-  highScore = 0;
-  localStorage.setItem("flappyHighScore", 0);
+  const selected = difficulty_select.value;
+  if (selected === "easy") {
+    easyHighScore = 0;
+    localStorage.setItem("easyHighScore", 0);
+  } else if (selected === "medium") {
+    mediumHighScore = 0;
+    localStorage.setItem("mediumHighScore", 0);
+  } else if (selected === "hard") {
+    hardHighScore = 0;
+    localStorage.setItem("hardHighScore", 0);
+  } else if (selected === "insane") {
+    insaneHighScore = 0;
+    localStorage.setItem("insaneHighScore", 0);
+  }
 }
 
 function getDifficultySettings() {
